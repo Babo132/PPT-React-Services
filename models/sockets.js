@@ -130,8 +130,10 @@ class Sockets {
         if (resultadoAbandono?.status === "replaced") {
           this.io.to(resultadoAbandono.nuevoJugador.id).emit("unido-a-la-sala", { position: resultadoAbandono.position });
         }
-        
+
+        delete this.jugadas[socket.id];
         this.io.emit("lista-salas", this.marcadores.obtenerSalasActivas());
+      
       });
       
       socket.on("reiniciar-partida", () => {
@@ -147,8 +149,9 @@ class Sockets {
       
           this.io.to(jugador1).emit("reiniciar-partida");
           this.io.to(jugador2).emit("reiniciar-partida");
-      
-          this.jugadas = {};
+
+          delete this.jugadas[jugador1];
+          delete this.jugadas[jugador2];
         }
       });
     });
